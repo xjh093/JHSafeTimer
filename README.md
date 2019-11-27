@@ -1,5 +1,6 @@
 # JHSafeTimer
 Use NSTimer with block and don’t worry about cyclical references.
+- 使用`NSTimer`配合`block`，无需担心循环引用
 
 ---
 
