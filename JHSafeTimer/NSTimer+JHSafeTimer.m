@@ -50,12 +50,14 @@
 
 - (void)handler:(NSTimer *)timer
 {
-    JHSafeTimerWrapper *wrapper = timer.userInfo;
-    JHSafeTimerBlock block = wrapper.block;
-    id target = wrapper.target;
+    id target = self.target;
+    if (!target) {
+        [timer invalidate];
+        return;
+    }
     
-    if (block) {
-        block(timer, target);
+    if (self.block) {
+        self.block(timer, target);
     }
 }
 
@@ -68,16 +70,16 @@
 
 @implementation NSTimer (JHSafeTimer)
 
-+ (NSTimer *)jh_scheduledTimerWithTimeInterval:(NSTimeInterval)interval inTarget:(id)aTarget repeats:(BOOL)repeats  block:(JHSafeTimerBlock)block
++ (NSTimer *)jh_scheduledTimerWithTimeInterval:(NSTimeInterval)interval weakTarget:(id)aTarget repeats:(BOOL)repeats  block:(JHSafeTimerBlock)block
 {
     JHSafeTimerWrapper *wrapper = [[JHSafeTimerWrapper alloc] initWithTarget:aTarget block:block];
-    return [NSTimer scheduledTimerWithTimeInterval:interval target:wrapper selector:@selector(handler:) userInfo:wrapper repeats:repeats];
+    return [NSTimer scheduledTimerWithTimeInterval:interval target:wrapper selector:@selector(handler:) userInfo:nil repeats:repeats];
 }
 
-+ (NSTimer *)jh_timerWithTimeInterval:(NSTimeInterval)interval inTarget:(id)aTarget repeats:(BOOL)repeats block:(JHSafeTimerBlock)block
++ (NSTimer *)jh_timerWithTimeInterval:(NSTimeInterval)interval weakTarget:(id)aTarget repeats:(BOOL)repeats block:(JHSafeTimerBlock)block
 {
     JHSafeTimerWrapper *wrapper = [[JHSafeTimerWrapper alloc] initWithTarget:aTarget block:block];
-    return [NSTimer timerWithTimeInterval:interval target:wrapper selector:@selector(handler:) userInfo:wrapper repeats:repeats];
+    return [NSTimer timerWithTimeInterval:interval target:wrapper selector:@selector(handler:) userInfo:nil repeats:repeats];
 }
 
 @end

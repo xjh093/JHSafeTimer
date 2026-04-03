@@ -35,10 +35,10 @@ typedef void(^JHSafeTimerBlock)(NSTimer *timer, id target);
 
 @interface NSTimer (JHSafeTimer)
 
-+ (NSTimer *)jh_scheduledTimerWithTimeInterval:(NSTimeInterval)interval inTarget:(id)aTarget repeats:(BOOL)repeats block:(JHSafeTimerBlock)block;
++ (NSTimer *)jh_scheduledTimerWithTimeInterval:(NSTimeInterval)interval weakTarget:(id)aTarget repeats:(BOOL)repeats block:(JHSafeTimerBlock)block;
 
 /// You must add the new timer to a run loop, using addTimer:forMode:
-+ (NSTimer *)jh_timerWithTimeInterval:(NSTimeInterval)interval inTarget:(id)aTarget repeats:(BOOL)repeats block:(JHSafeTimerBlock)block;
++ (NSTimer *)jh_timerWithTimeInterval:(NSTimeInterval)interval weakTarget:(id)aTarget repeats:(BOOL)repeats block:(JHSafeTimerBlock)block;
 
 @end
 
